@@ -3,13 +3,20 @@ package com.example.airquality.data
 import com.example.airquality.entity.AQStation
 import com.example.airquality.logic.RemoteStationRepository
 import com.google.gson.annotations.SerializedName
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.http.GET
 import javax.inject.Inject
 
 class AirlyStationDataSource @Inject constructor(private val airlyService : AirlyService) : RemoteStationRepository {
-    override suspend fun getAll(): List<AQStation> {
+
+    companion object{
+        const val HOST = "https://airapi.airly.eu/v2/"
+    }
+
+    override suspend fun getAll(): List<AQStation> = withContext(Dispatchers.IO) {
         val installations = airlyService.getInstallations()
-        return installations.map { installation -> AQStation(
+        return@withContext installations.map { installation -> AQStation(
             id = installation.id.toString(),
             name = installation.address?.displayAddress2 ?: "Unknown",
             city = installation.address?.city ?: "Unknown",
@@ -19,7 +26,7 @@ class AirlyStationDataSource @Inject constructor(private val airlyService : Airl
     }
 
     interface AirlyService {
-        @GET("installations/nearest?lat=50.062006&lng=19.940984&maxDistanceKM=5&maxResults=100\n")
+        @GET("installations/nearest?lat=50.062006&lng=19.940984&maxDistanceKM=5&maxResults=100")
         suspend fun getInstallations() : List<Installation>
     }
 
