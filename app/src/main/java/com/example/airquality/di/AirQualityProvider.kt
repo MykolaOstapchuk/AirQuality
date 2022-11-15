@@ -3,6 +3,8 @@ package com.example.airquality.di
 import com.example.airquality.airly.AirlyEndpoint
 import com.example.airquality.airly.AirlyService
 import com.example.airquality.data.AirlyStationDataSource
+import com.example.airquality.data.local.InMemoryStationsRepository
+import com.example.airquality.repository.LocalStationsRepository
 import com.example.airquality.repository.RemoteStationRepository
 import dagger.Module
 import dagger.Provides
@@ -23,6 +25,12 @@ class AirQualityProvider {
     @Singleton
     fun provideRemoteStationsRepository(airlyService: AirlyService): RemoteStationRepository {
         return AirlyStationDataSource(airlyService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideLocalStationsRepository(): LocalStationsRepository {
+        return InMemoryStationsRepository()
     }
 
     @Provides
