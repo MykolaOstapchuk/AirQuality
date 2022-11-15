@@ -1,5 +1,7 @@
 package com.example.airquality.di
 
+import com.example.airquality.airly.AirlyEndpoint
+import com.example.airquality.airly.AirlyService
 import com.example.airquality.data.AirlyStationDataSource
 import com.example.airquality.logic.RemoteStationRepository
 import dagger.Module
@@ -19,7 +21,7 @@ class AirQualityProvider {
 
     @Provides
     @Singleton
-    fun provideRemoteStationRepository(airlyService: AirlyStationDataSource.AirlyService) : RemoteStationRepository {
+    fun provideRemoteStationsRepository(airlyService: AirlyService): RemoteStationRepository {
         return AirlyStationDataSource(airlyService)
     }
 
@@ -41,14 +43,14 @@ class AirQualityProvider {
             .Builder()
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(AirlyStationDataSource.HOST)
+            .baseUrl(AirlyEndpoint.HOST)
             .build()
     }
 
     @Provides
     @Singleton
-    fun provideAirlyService(retrofit: Retrofit) : AirlyStationDataSource.AirlyService{
-       return retrofit.create(AirlyStationDataSource.AirlyService::class.java)
+    fun provideAirlyService(retrofit: Retrofit): AirlyService {
+        return retrofit.create(AirlyService::class.java)
     }
 
 }
