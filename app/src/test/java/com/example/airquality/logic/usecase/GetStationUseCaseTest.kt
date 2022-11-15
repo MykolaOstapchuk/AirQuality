@@ -2,7 +2,7 @@ package com.example.airquality.logic.usecase
 
 import com.example.airquality.entity.AQStation
 import com.example.airquality.logic.GetStationUseCase
-import com.example.airquality.logic.RemoteStationRepository
+import com.example.airquality.repository.RemoteStationRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -25,7 +25,7 @@ class GetStationUseCaseTest{
     }
  }
 
-class MockRemoteStationsRepository: RemoteStationRepository{
+class MockRemoteStationsRepository: RemoteStationRepository {
     val getAllCalled : Boolean
         get() = getAllCallsCount>0
     var getAllCallsCount : Int = 0

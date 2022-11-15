@@ -3,7 +3,7 @@ package com.example.airquality.di
 import com.example.airquality.airly.AirlyEndpoint
 import com.example.airquality.airly.AirlyService
 import com.example.airquality.data.AirlyStationDataSource
-import com.example.airquality.logic.RemoteStationRepository
+import com.example.airquality.repository.RemoteStationRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
