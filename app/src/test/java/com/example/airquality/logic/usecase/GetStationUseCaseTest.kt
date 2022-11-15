@@ -103,6 +103,31 @@ class GetStationUseCaseTest{
         //THEN
         assertEquals("1",actual.first().id)
     }
+
+    @Test
+    fun executeSavesStationsToLocalWhenRemoteIsNotEmpty() = runBlocking {
+        //GIVEN
+        local.getAllResult = emptyList()
+        remote.getAllResult  = listOf(sampleAQStation)
+        //WHEN
+        sut.execute()
+        //THEN
+        assertEquals(true,local.saveCalled)
+        assertEquals("1",local.saveReceivedArguments.first().id)
+    }
+
+    @Test
+    fun executeReturnsValidLocalListStations() = runBlocking {
+        //GIVEN
+        val sampleAQStation2 = AQStation("2","Name","Lublin","Sponsor","")
+
+        local.getAllResult = listOf(sampleAQStation,sampleAQStation2)
+        //WHEN
+        val actual = sut.execute()
+        //THEN
+        assertEquals("1",actual.first().id)
+        assertEquals("2",actual.last().id)
+    }
  }
 
 class MockLocalStationsRepository : LocalStationsRepository{
@@ -116,12 +141,15 @@ class MockLocalStationsRepository : LocalStationsRepository{
 
     var getAllResult : List<AQStation> = emptyList()
 
+    var saveReceivedArguments : List<AQStation> = emptyList()
+
     override suspend fun getAll(): List<AQStation> {
         getAllCallsCount+=1
         return getAllResult
     }
 
     override suspend fun save(stations: List<AQStation>) {
+        saveReceivedArguments = stations
         saveCallsCount+=1
     }
 }
