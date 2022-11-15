@@ -13,8 +13,10 @@ class GetStationUseCase @Inject constructor(
 
     suspend fun execute() : List<AQStation>{
         val localStations = localStationsRepository.getAll()
-        if(localStations.isEmpty())
-            return remoteStationRepository.getAll()
+        if(localStations.isEmpty()) {
+            val remoteStationRepository = remoteStationRepository.getAll()
+            return remoteStationRepository
+        }
         return localStations
     }
 }

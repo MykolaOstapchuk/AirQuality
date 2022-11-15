@@ -72,6 +72,37 @@ class GetStationUseCaseTest{
         //THEN
         assertEquals(1,local.getAllCallsCount)
     }
+
+    @Test
+    fun executeReturnsReportsStationsWhenRemoteStationRepositoryIsCalled() = runBlocking{
+        //GIVEN
+        local.getAllResult = emptyList()
+        remote.getAllResult  = listOf(sampleAQStation)
+        //WHEN
+        val actual = sut.execute()
+        //THEN
+        assertEquals("1",actual.first().id)
+    }
+
+    @Test
+    fun executeReturnsLocalStationsWhenRemoteStationRepositoryIsCalled() = runBlocking{
+        //GIVEN
+        local.getAllResult = listOf(sampleAQStation)
+        //WHEN
+        val actual = sut.execute()
+        //THEN
+        assertEquals("1",actual.first().id)
+    }
+
+    @Test
+    fun executeReturnsLocalStationsWhenLocalRepositoryIsNotEmpty() = runBlocking{
+        //GIVEN
+        local.getAllResult = listOf(sampleAQStation)
+        //WHEN
+        val actual = sut.execute()
+        //THEN
+        assertEquals("1",actual.first().id)
+    }
  }
 
 class MockLocalStationsRepository : LocalStationsRepository{
@@ -96,12 +127,14 @@ class MockLocalStationsRepository : LocalStationsRepository{
 }
 
 class MockRemoteStationsRepository: RemoteStationRepository {
+    var getAllResult : List<AQStation> = emptyList()
+
     val getAllCalled : Boolean
         get() = getAllCallsCount>0
     var getAllCallsCount : Int = 0
 
     override suspend fun getAll(): List<AQStation> {
         getAllCallsCount+=1
-        return listOf()
+        return getAllResult
     }
 }
