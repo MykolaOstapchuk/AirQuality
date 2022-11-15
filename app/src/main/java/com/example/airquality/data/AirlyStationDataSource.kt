@@ -16,7 +16,8 @@ class AirlyStationDataSource @Inject constructor(private val airlyService : Airl
 
     override suspend fun getAll(): List<AQStation> = withContext(Dispatchers.IO) {
         val installations = airlyService.getInstallations()
-        return@withContext installations.map { installation -> AQStation(
+        return@withContext installations.map { installation ->
+            AQStation(
             id = installation.id.toString(),
             name = installation.address?.displayAddress2 ?: "Unknown",
             city = installation.address?.city ?: "Unknown",
