@@ -1,4 +1,4 @@
-package com.example.airquality.logic
+package com.example.airquality.repository
 
 import com.example.airquality.entity.AQStation
 
